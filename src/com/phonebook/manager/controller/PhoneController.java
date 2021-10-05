@@ -80,11 +80,19 @@ public class PhoneController {
 
 	public boolean isInteger(String str) {
 		try {
-			Integer.parseInt(str);
+			
+			// Max of long is 19 digits, else "NumberFormatException" is thrown
+			Long.valueOf(str);
 			return true;
-		} catch (NumberFormatException nfe) {
+			
+		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+	
+	public boolean isValidLength(String str) {
+		
+		return str.length() <= 19;
 	}
 
 	// Action listeners implementation
@@ -143,17 +151,26 @@ public class PhoneController {
 			} else if (dbModel.isPhoneExists(pn)) {
 				view.showMessage("Duplication", "This phone number already exists, no duplicates are allowed",
 						JOptionPane.ERROR_MESSAGE);
-			} else if (!isInteger(pn)) {
-				view.showMessage("Invalid Phone Number", "The phone must be numbers", JOptionPane.ERROR_MESSAGE);
+			} else if (!isValidLength(pn)) {
+				
+				view.showMessage("Max Phone Number Length", "The phone must be less than 20", JOptionPane.ERROR_MESSAGE);
+				
 			} else {
+				
+				if(!isInteger(pn)) {
+					
+					view.showMessage("Invalid Phone Number", "The phone must be numbers", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					// Write data to the file
+					dbModel.writeData(name, pn);
 
-				// Write data to the file
-				dbModel.writeData(name, pn);
+					// Refresh table with the new data
+					refreshTableGUI();
 
-				// Refresh table with the new data
-				refreshTableGUI();
+					view.getAddGUI().resetFields();
+				}
 
-				view.getAddGUI().resetFields();
 			}
 		}
 	}

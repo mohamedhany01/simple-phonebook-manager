@@ -13,7 +13,7 @@ import javax.swing.WindowConstants;
 public class PhoneView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final String APP_VER = "v1.1";
+	private static final String APP_VER = "v1.1.1";
 
 	public PhoneView() {
 		setTitle("Phone Manager " + APP_VER);
